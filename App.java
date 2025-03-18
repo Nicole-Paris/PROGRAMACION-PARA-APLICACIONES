@@ -1,51 +1,38 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.Scanner;
 
 public class App {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        
-        System.out.print("Ingresa el número de candidatos: ");
-        int numCandidatos = scanner.nextInt();
-        int[] votos = new int[numCandidatos + 1];
-        int[] candidatos = new int[numCandidatos + 1];
-        int totalVotos = 0;
-        int maxVotos = 0;
+    public static void main(String[] args) throws Exception {
 
-        System.out.println("Ingresa los votos (número del candidato). Ingresa 0 para finalizar:");
-        while (true) {
-            int voto = scanner.nextInt();
-            if (voto == 0) {
-                break;
+        Scanner archivo = new Scanner(System.in);
+        System.out.println("Ingrese la cadena a eliminar: ");
+        String cadena = archivo.nextLine();
+
+        System.out.println("Ingrese el nombre del archivo: ");
+        String nombreArchivo = archivo.nextLine();
+
+        File file = new File(nombreArchivo);
+
+        try {
+            Scanner leerTexto = new Scanner(file);
+            String reemplazar = "";
+
+            while (leerTexto.hasNextLine()) {
+                String data = leerTexto.nextLine();
+                reemplazar += data.replaceAll(cadena, "");
             }
-            if (voto >= 1 && voto <= numCandidatos) {
-                if (votos[voto] == 0) {
-                    candidatos[voto] = voto;
-                }
-                votos[voto]++;
-                totalVotos++;
-                if (votos[voto] > maxVotos) {
-                    maxVotos = votos[voto];
-                }
-            } else {
-                System.out.println("Número de candidato inválido, intenta de nuevo.");
-            }
+
+            FileWriter escribir = new FileWriter(file, false);
+            escribir.write(reemplazar);
+            escribir.close();
+
+            leerTexto.close();
+            archivo.close();
         }
-
-        System.out.println("\nResultados:");
-        for (int i = 1; i <= numCandidatos; i++) {
-            if (votos[i] > 0) {
-                double porcentaje = (votos[i] * 100.0) / totalVotos;
-                System.out.printf("Candidato %d: %d votos (%.2f%%)\n", candidatos[i], votos[i], porcentaje);
-            }
+        catch (FileNotFoundException ex) {
+            System.out.println(ex.getMessage());
         }
-
-        System.out.println("\nGanador(es):");
-        for (int i = 1; i <= numCandidatos; i++) {
-            if (votos[i] == maxVotos) {
-                System.out.printf("Candidato %d con %d votos\n", candidatos[i], votos[i]);
-            }
-        }
-
-        scanner.close();
     }
 }
