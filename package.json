@@ -1,0 +1,11 @@
+{
+  "name": "my_app",
+  "version": "1.0.0",
+  "description": "Mi primera app",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Nicole Paris",
+  "license": "ISC"
+}
